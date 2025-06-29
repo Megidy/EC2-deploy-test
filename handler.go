@@ -38,6 +38,7 @@ func (s *Server) Run() error {
 	s.echo.Use(s.SomeMiddleware)
 
 	s.echo.GET("/ping", s.Pong)
+	s.echo.GET("/hello", s.Hello)
 	return s.echo.Start(s.httpServerPort)
 }
 
@@ -56,4 +57,10 @@ func (s *Server) Pong(ctx echo.Context) error {
 	var resp Response
 	resp.Pong = "pong"
 	return ctx.JSON(http.StatusOK, resp)
+}
+
+func (s *Server) Hello(ctx echo.Context) error {
+	return ctx.JSON(http.StatusOK, map[string]string{
+		"hello": "world",
+	})
 }
