@@ -48,7 +48,7 @@ func (s *Server) Shutdown() error {
 }
 
 type Response struct {
-	Pong string `json:"pong"`
+	Pong string `json:"ping"`
 }
 
 func (s *Server) Pong(ctx echo.Context) error {
