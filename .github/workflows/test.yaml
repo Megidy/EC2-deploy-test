@@ -20,4 +20,9 @@ jobs:
       - name: build
         run: go build ./...
         
-
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run test
+        run: go test -v -cover ./..
