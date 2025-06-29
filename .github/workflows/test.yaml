@@ -32,3 +32,22 @@ jobs:
           go-version: 1.23
       - name: Run test
         run: go test -v -cover ./...
+  
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create .ssh directory
+        run: mkdir -p ~/.ssh
+      
+      - name: copy private SSH key
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+      
+      - name: update permissions
+        run: sudo chmod 600 ~/.ssh/id_ed25519
+
+      - name: Add EC2 to known hosts
+        run: ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to EC2 instance
+        run: ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "cd /home/ubuntu/EC2-deploy-test && git fetch origin && git pull origin master && sudo docker-compose up --build -d"
