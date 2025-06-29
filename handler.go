@@ -64,3 +64,7 @@ func (s *Server) Hello(ctx echo.Context) error {
 		"hello": "world",
 	})
 }
+
+func Function(value int) int {
+	return value
+}
